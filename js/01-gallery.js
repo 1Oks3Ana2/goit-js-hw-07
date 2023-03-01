@@ -41,20 +41,13 @@ function onImageClick(e) {
 function onOpenModal(e) {
   window.addEventListener("keydown", onEscKeyPress);
 
-  const instance = basicLightbox.create(`
-    <div class="modal">
-        <img src='${e.target.dataset.source}' alt='${e.target.alt}' width='940' />
-    </div>
-`);
-
-  instance.show();
+  createModalInstance(e);
 }
 
 function onCloseModal() {
   window.removeEventListener("keydown", onEscKeyPress);
 
   const modalContainer = document.querySelector(".basicLightbox--visible");
-
   modalContainer.remove();
 }
 
@@ -62,4 +55,22 @@ function onEscKeyPress(e) {
   if (e.code === "Escape") {
     onCloseModal();
   }
+}
+
+function createModalInstance(e) {
+  const instance = basicLightbox.create(`
+    <div class="modal">
+        <img src='${e.target.dataset.source}'class='modal__image' alt='${e.target.alt}' width='940' />
+    </div>
+`);
+  instance.show();
+
+  onModalImgClose(instance);
+}
+
+function onModalImgClose(instance) {
+  const modalImgRef = document.querySelector(".modal__image");
+  modalImgRef.addEventListener("click", () => {
+    instance.close();
+  });
 }
